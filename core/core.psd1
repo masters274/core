@@ -12,7 +12,7 @@
 RootModule = 'core.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.9.2'
+ModuleVersion = '1.9.2.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -215,6 +215,9 @@ Version 1.9.1
 
 Version 1.9.2
 - Function (SECURITY) : changed : Get-LoggedOnUser. Changed the filter for when the user has an alternate shell. Also added SessionID, creation time, and idle time.
+
+Version 1.9.2.1
+- Function (SECURITY) : changed : Get-LoggedOnUser. Solved an issue with create data getting mixed up. 
 '
 
         # Prerelease string of this module

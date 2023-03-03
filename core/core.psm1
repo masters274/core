@@ -1422,10 +1422,7 @@ Function Get-LoggedOnUser {
         [PSCredential]$Credential
     )
  
-    Begin {             
-        #$ea = $ErrorActionPreference
-        
-        #$ErrorActionPreference = 'Stop'
+    Begin {
 
         $wmiParams = @{
             Class       = 'Win32_Process'
@@ -1471,15 +1468,13 @@ Function Get-LoggedOnUser {
                 $idleInfo = Get-IdleInfo -processInfo $processinfo
                 
                 $processinfo | Foreach-Object { 
-                    
-                    $pi = $_ 
 
-                    if ($pi.Name -eq 'sihost.exe') {
-                        $pi.GetOwner() 
-                    }
-                    else {
+                    if ($_.Name -eq 'LogonUI.exe') {
                         return
                     }
+                    
+                    $pi = $_ 
+                    $pi.GetOwner() 
                 } |  
                 Where-Object { $_ -notcontains 'NETWORK SERVICE' -and $_ -notcontains 'LOCAL SERVICE' -and $_ -notcontains 'SYSTEM' } | 
                 Sort-Object -Unique -Property User | 
@@ -1503,10 +1498,6 @@ Function Get-LoggedOnUser {
                 $false
             }
         }
-    }
-    
-    End { 
-        #$ErrorActionPreference = $ea
     }
 }
 
