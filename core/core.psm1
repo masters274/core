@@ -1419,7 +1419,6 @@ Function Get-LoggedOnUser {
         [Alias('Name', 'IPAddress')]
         [String[]]$ComputerName,
         
-        [Parameter(Mandatory = $true, HelpMessage = 'Admin creds for remote computer')]
         [System.Management.Automation.Credential()]
         [PSCredential] $Credential,
 
@@ -1474,7 +1473,7 @@ Function Get-LoggedOnUser {
                 $processinfo | Foreach-Object { 
 
                     if ($_.Name -eq 'LogonUI.exe') {
-                        return
+                        continue
                     }
                     
                     $pi = $_ 

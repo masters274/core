@@ -219,7 +219,7 @@ Version 1.9.2
 Version 1.9.2.1
 - Function (SECURITY) : changed : Get-LoggedOnUser. Solved an issue with create data getting mixed up. 
 
-Version 1.9.3
+Version 1.9.3.1
 - Function (SECURITY) : changed : Get-LoggedOnUser. Updated with duration information, per request
 '
 
