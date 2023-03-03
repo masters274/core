@@ -1412,14 +1412,18 @@ Function Get-LoggedOnUser {
     [CmdletBinding()]             
     Param              
     (                        
-        [Parameter( Mandatory = $true,
-            Position = 0,                           
-            ValueFromPipeline = $true,             
-            ValueFromPipelineByPropertyName = $true
-        )] [String[]]$ComputerName,
+        [Parameter( Mandatory,
+            ValueFromPipeline,                           
+            ValueFromPipelineByPropertyName
+        )] 
+        [Alias('Name', 'IPAddress')]
+        [String[]]$ComputerName,
         
-        [Parameter(position = 1)]
-        [PSCredential]$Credential
+        [Parameter(Mandatory = $true, HelpMessage = 'Admin creds for remote computer')]
+        [System.Management.Automation.Credential()]
+        [PSCredential] $Credential,
+
+        [Switch] $ShowEmpty
     )
  
     Begin {
@@ -1450,7 +1454,7 @@ Function Get-LoggedOnUser {
                     $idleTime = ([WMI] '').ConvertToDateTime($proc.CreationDate)
 
                     return @{
-                        Id = $id 
+                        Id       = $id 
                         IdleTime = $idleTime
                     }
                 }
@@ -1462,7 +1466,7 @@ Function Get-LoggedOnUser {
         Foreach ($Computer in $ComputerName) {
             $processinfo = @(Get-WmiObject @wmiParams -ComputerName $Computer)
                 
-            If ($processinfo) {
+            If ($processinfo.Name -contains 'sihost.exe') {
                 
                 # Need to get the idle info first, if exists
                 $idleInfo = Get-IdleInfo -processInfo $processinfo
@@ -1481,21 +1485,55 @@ Function Get-LoggedOnUser {
                 ForEach-Object { 
 
                     $dt = ([WMI] '').ConvertToDateTime($pi.CreationDate)
+                    $idleTime = $( 
+                        
+                        if ($idleInfo.Id -eq $pi.SessionId) { 
+
+                            $t = New-TimeSpan -Start $idleInfo.IdleTime -End ([datetime]::now)
+
+                            '{0}d {1}h {2}m {3}s' -f $t.Days, $t.Hours, $t.Minutes, $t.Seconds
+                        } 
+                        else { 
+                            $null 
+                        }
+                    )
+
+                    $ld = New-TimeSpan -Start $dt -End ([datetime]::now)
+                    $logonDuration = '{0}d {1}h {2}m {3}s' -f $ld.Days, $ld.Hours, $ld.Minutes, $ld.Seconds
+
                     New-Object psobject -Property @{ 
                         
-                        Computer     = $Computer
-                        Domain       = $_.Domain
-                        User         = $_.User
-                        SessionId    = $pi.SessionId
-                        CreationDate = $dt 
-                        Idle         = $(if ($idleInfo.Id -eq $pi.SessionId) { $true } else { $false })
-                        IdleTime     = $(if ($idleInfo.Id -eq $pi.SessionId) { $idleInfo.IdleTime } else { $null })
+                        Computer      = $Computer
+                        Domain        = $_.Domain
+                        User          = $_.User
+                        SessionId     = $pi.SessionId
+                        CreationDate  = $dt 
+                        LogonDuration = $logonDuration
+                        Idle          = $(if ($idleInfo.Id -eq $pi.SessionId) { $true } else { $false })
+                        IdleTime      = $idleTime
                     } 
                 } |  
-                Select-Object Computer, Domain, User, SessionId, CreationDate, Idle, IdleTime
+                Select-Object Computer, Domain, User, SessionId, CreationDate, LogonDuration, Idle, IdleTime
             }
             Else {
-                $false
+                
+                if ($ShowEmpty) {
+                    
+                    New-Object psobject -Property @{ 
+                        
+                        Computer      = $Computer
+                        Domain        = $null
+                        User          = $null
+                        SessionId     = $null
+                        CreationDate  = $null 
+                        LogonDuration = $null
+                        Idle          = $null
+                        IdleTime      = $null
+                    } 
+                }
+                else {
+                    $false
+                }
             }
         }
     }

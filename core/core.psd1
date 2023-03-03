@@ -12,7 +12,7 @@
 RootModule = 'core.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.9.2.1'
+ModuleVersion = '1.9.3'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -218,6 +218,9 @@ Version 1.9.2
 
 Version 1.9.2.1
 - Function (SECURITY) : changed : Get-LoggedOnUser. Solved an issue with create data getting mixed up. 
+
+Version 1.9.3
+- Function (SECURITY) : changed : Get-LoggedOnUser. Updated with duration information, per request
 '
 
         # Prerelease string of this module
