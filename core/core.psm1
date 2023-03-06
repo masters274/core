@@ -1408,7 +1408,7 @@ Function Start-ImpersonateUser {
 }
 
 
-Function Get-LoggedOnUser {
+function Get-LoggedOnUser {
     [CmdletBinding()]             
     Param              
     (                        
@@ -1430,10 +1430,19 @@ Function Get-LoggedOnUser {
         $wmiParams = @{
             Class       = 'Win32_Process'
             Filter      = "Name='sihost.exe' OR Name='logonUI.exe'" 
-            ErrorAction = 'Stop'
+        }
+
+        if ($ErrorAction) {
+
+            $wmiParams += @{ ErrorAction = $ErrorAction }
+        }
+
+        if ($WarningAction) {
+
+            $wmiParams += @{ WarningAction = $WarningAction }
         }
         
-        If ($Credential) {
+        if ($Credential) {
             $wmiParams += @{ Credential = $Credential } 
         }
 
@@ -1465,7 +1474,7 @@ Function Get-LoggedOnUser {
         Foreach ($Computer in $ComputerName) {
             $processinfo = @(Get-WmiObject @wmiParams -ComputerName $Computer)
                 
-            If ($processinfo.Name -contains 'sihost.exe') {
+            if ($processinfo.Name -contains 'sihost.exe') {
                 
                 # Need to get the idle info first, if exists
                 $idleInfo = Get-IdleInfo -processInfo $processinfo
@@ -1514,7 +1523,7 @@ Function Get-LoggedOnUser {
                 } |  
                 Select-Object Computer, Domain, User, SessionId, CreationDate, LogonDuration, Idle, IdleTime
             }
-            Else {
+            else {
                 
                 if ($ShowEmpty) {
                     
