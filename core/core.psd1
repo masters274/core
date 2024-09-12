@@ -8,106 +8,106 @@
 
 @{
 
-# Script module or binary module file associated with this manifest.
-RootModule = 'core.psm1'
+    # Script module or binary module file associated with this manifest.
+    RootModule        = 'core.psm1'
 
-# Version number of this module.
-ModuleVersion = '1.9.3.2'
+    # Version number of this module.
+    ModuleVersion     = '1.9.3.3'
 
-# Supported PSEditions
-# CompatiblePSEditions = @()
+    # Supported PSEditions
+    # CompatiblePSEditions = @()
 
-# ID used to uniquely identify this module
-GUID = '7ffd438f-134c-49be-8000-9a9f3af1cbe3'
+    # ID used to uniquely identify this module
+    GUID              = '7ffd438f-134c-49be-8000-9a9f3af1cbe3'
 
-# Author of this module
-Author = 'Chris Masters'
+    # Author of this module
+    Author            = 'Chris Masters'
 
-# Company or vendor of this module
-CompanyName = 'Chris Masters'
+    # Company or vendor of this module
+    CompanyName       = 'Chris Masters'
 
-# Copyright statement for this module
-Copyright = '(c) 2017 Chris Masters. All rights reserved.'
+    # Copyright statement for this module
+    Copyright         = '(c) 2017 Chris Masters. All rights reserved.'
 
-# Description of the functionality provided by this module
-Description = 'Module with various generic functions that could be used in any script'
+    # Description of the functionality provided by this module
+    Description       = 'Module with various generic functions that could be used in any script'
 
-# Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '2.0'
+    # Minimum version of the Windows PowerShell engine required by this module
+    PowerShellVersion = '2.0'
 
-# Name of the Windows PowerShell host required by this module
-# PowerShellHostName = ''
+    # Name of the Windows PowerShell host required by this module
+    # PowerShellHostName = ''
 
-# Minimum version of the Windows PowerShell host required by this module
-# PowerShellHostVersion = ''
+    # Minimum version of the Windows PowerShell host required by this module
+    # PowerShellHostVersion = ''
 
-# Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# DotNetFrameworkVersion = ''
+    # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    # DotNetFrameworkVersion = ''
 
-# Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# CLRVersion = ''
+    # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    # CLRVersion = ''
 
-# Processor architecture (None, X86, Amd64) required by this module
-# ProcessorArchitecture = ''
+    # Processor architecture (None, X86, Amd64) required by this module
+    # ProcessorArchitecture = ''
 
-# Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+    # Modules that must be imported into the global environment prior to importing this module
+    # RequiredModules = @()
 
-# Assemblies that must be loaded prior to importing this module
-# RequiredAssemblies = @()
+    # Assemblies that must be loaded prior to importing this module
+    # RequiredAssemblies = @()
 
-# Script files (.ps1) that are run in the caller's environment prior to importing this module.
-# ScriptsToProcess = @()
+    # Script files (.ps1) that are run in the caller's environment prior to importing this module.
+    # ScriptsToProcess = @()
 
-# Type files (.ps1xml) to be loaded when importing this module
-# TypesToProcess = @()
+    # Type files (.ps1xml) to be loaded when importing this module
+    # TypesToProcess = @()
 
-# Format files (.ps1xml) to be loaded when importing this module
-# FormatsToProcess = @()
+    # Format files (.ps1xml) to be loaded when importing this module
+    # FormatsToProcess = @()
 
-# Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+    # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
+    # NestedModules = @()
 
-# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+    # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
+    FunctionsToExport = '*'
 
-# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @()
+    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+    CmdletsToExport   = @()
 
-# Variables to export from this module
-VariablesToExport = '*'
+    # Variables to export from this module
+    VariablesToExport = '*'
 
-# Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+    # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
+    AliasesToExport   = '*'
 
-# DSC resources to export from this module
-# DscResourcesToExport = @()
+    # DSC resources to export from this module
+    # DscResourcesToExport = @()
 
-# List of all modules packaged with this module
-# ModuleList = @()
+    # List of all modules packaged with this module
+    # ModuleList = @()
 
-# List of all files packaged with this module
-# FileList = @()
+    # List of all files packaged with this module
+    # FileList = @()
 
-# Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-PrivateData = @{
+    # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+    PrivateData       = @{
 
-    PSData = @{
+        PSData = @{
 
-        # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'system'
+            # Tags applied to this module. These help with module discovery in online galleries.
+            Tags         = 'system'
 
-        # A URL to the license for this module.
-        LicenseUri = 'https://github.com/masters274/core/blob/main/LICENSE'
+            # A URL to the license for this module.
+            LicenseUri   = 'https://github.com/masters274/core/blob/main/LICENSE'
 
-        # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/masters274/core'
+            # A URL to the main website for this project.
+            ProjectUri   = 'https://github.com/masters274/core'
 
-        # A URL to an icon representing this module.
-        # IconUri = ''
+            # A URL to an icon representing this module.
+            # IconUri = ''
 
-        # ReleaseNotes of this module
-        ReleaseNotes = '
+            # ReleaseNotes of this module
+            ReleaseNotes = '
 Version 0.3
 - Code folding regions added for better navigation and visibility
 - Function (SECURITY) added : Test-AdminRights
@@ -128,13 +128,13 @@ Version 0.5
 - Function (FILESYSTEM) added : New alias created for Invoke-Touch = touch
 - Function (SECURITY) added : Invoke-CredentailManager, with aliases
 - Function (LOG/ALERT) updated : Removed the $boolDebug declaration from this function. This will be
-set by the calling function, when -Debug is used. 
+set by the calling function, when -Debug is used.
 - Function (DEVELOPMENT) updated : Now allows you to add the file path to a module not in the default path.
-        
+
 Version 0.6
 - Function (DEVELOPMENT) added : Invoke-EnvrionmentalVariable
 - Function (DEVELOPMENT) added : Invoke-Alert with alias (alert). Audible tone for when you want to
-monitor the availability of something while doing some other work. 
+monitor the availability of something while doing some other work.
 - Function (SECURITY) updated : Parameter alias on Invoke-CredentialManager for backward compatibility
 - Function (DEVELOPMENT) added : ConvertTo-Hexadecimal
 - Function (DEVELOPMENT) added : ConvertFrom-HexToFile. Great way for working with binary files.
@@ -147,20 +147,20 @@ Version 0.7
 - Function (FILESYSTEM) added : New-SymLink
 - Function (FILESYSTEM) added : Remove-SymLink
 - Function (DEVELOPMENT) updated : Add-Signature. Removed aliases used inside the function.
-- Module header information added. 
+- Module header information added.
 - Function (LOG/ALERT) moved : Moved Invoke-Alert to Log/Alert region.
 - Custom Type : added : MkLink type added. This is needed by several functions.
-- Function (SECURITY) : updated : Invoke-Elevate : Removed variable baseline function call. This function 
-is typically used in conjunction with other functions, which may be using the baseline functionality. 
+- Function (SECURITY) : updated : Invoke-Elevate : Removed variable baseline function call. This function
+is typically used in conjunction with other functions, which may be using the baseline functionality.
 
 Version 0.8
-- Function (FILESYSTEM) added : New-HardLink : 
-- Alias (FILESYSTEM) : added : Create-SymbolicLink : Easier to remember when trying to thinka about what 
-the function actually does. 
-- Alias (DEVELOPMENT) : added : New-InvironmentalVarVariable, New-EnvVar, Remove-EnvVar, and 
+- Function (FILESYSTEM) added : New-HardLink :
+- Alias (FILESYSTEM) : added : Create-SymbolicLink : Easier to remember when trying to thinka about what
+the function actually does.
+- Alias (DEVELOPMENT) : added : New-InvironmentalVarVariable, New-EnvVar, Remove-EnvVar, and
 Remove-EnvironmentalVariable
 - Function (SECURITY) : changed : Invoke-Elevate : added an argument for "no profile", instead of this
-being the default. Sometimes we need the profile to load custom modules. 
+being the default. Sometimes we need the profile to load custom modules.
 - Function (SECURITY) : changed : Invoke-CredentialManager modified to store user name too.
 - Function (DEVELOPMENT) : changed : ConvertFrom-HexToFile updated. Failed on empty directories
 
@@ -177,7 +177,7 @@ Version 1.1
 
 Version 1.2
 - Function (DEVELOPMENT) : added : ConvertFrom-Hexadecimal. Converts hex input to ASCII string
-- Function (FILESYSTEM) : added : ConvertFrom-DosToUnix. Replaces CLRF with newline within a file. 
+- Function (FILESYSTEM) : added : ConvertFrom-DosToUnix. Replaces CLRF with newline within a file.
 
 Version 1.3
 - Region (SYSTEM) : added : additional functions that fit well into the core module
@@ -185,13 +185,13 @@ Version 1.3
     Clear-IECachedData, Get-ComObject
 
 Version 1.4
-- Function (FILESYSTEM) : changed : Invoke-Touch updated to accept value from pipeline. 
+- Function (FILESYSTEM) : changed : Invoke-Touch updated to accept value from pipeline.
 - Function (DEVELOPMENT) : added : Convert-ByteArrayToHex. Needed when working with some registry values
 
 Version 1.5
 - Function (SYSTEM) : added : Get-WindowsLicenseInfo. Gets a summary of the slmgr output from local or remote.
 - Function (SYSTEM) : changed : Get-InstalledSoftware. Now accepts and array of computer names.
-- Function (FILESYSTEM) : changed : Invoke-Touch. Ability to force directory type. 
+- Function (FILESYSTEM) : changed : Invoke-Touch. Ability to force directory type.
 
 Version 1.6
 - Function (SECURITY) : changed : Start-ImpersonateUser. Put password in quotes to escape most characters.
@@ -203,7 +203,7 @@ Version 1.6
 - Function (SYSTEM) : changed : Get-UninstallString. Rewrite. Works off domain now.
 
 Version 1.7-8
-- Function (SECURITY) : changed : Start-ImpersonateUser. Reworked some things. More tweaking to come. 
+- Function (SECURITY) : changed : Start-ImpersonateUser. Reworked some things. More tweaking to come.
 
 Version 1.9
 - Function (FILESYSTEM) : added : Set-DirectoryOwner. Changes the ownership of a folder
@@ -217,30 +217,30 @@ Version 1.9.2
 - Function (SECURITY) : changed : Get-LoggedOnUser. Changed the filter for when the user has an alternate shell. Also added SessionID, creation time, and idle time.
 
 Version 1.9.2.1
-- Function (SECURITY) : changed : Get-LoggedOnUser. Solved an issue with create data getting mixed up. 
+- Function (SECURITY) : changed : Get-LoggedOnUser. Solved an issue with create data getting mixed up.
 
 Version 1.9.3.1 & 2
 - Function (SECURITY) : changed : Get-LoggedOnUser. Updated with duration information, per request. Ability to pass error and warning action
 '
 
-        # Prerelease string of this module
-        # Prerelease = ''
+            # Prerelease string of this module
+            # Prerelease = ''
 
-        # Flag to indicate whether the module requires explicit user acceptance for install/update
-        # RequireLicenseAcceptance = $false
+            # Flag to indicate whether the module requires explicit user acceptance for install/update
+            # RequireLicenseAcceptance = $false
 
-        # External dependent modules of this module
-        # ExternalModuleDependencies = @()
+            # External dependent modules of this module
+            # ExternalModuleDependencies = @()
 
-    } # End of PSData hashtable
+        } # End of PSData hashtable
 
- } # End of PrivateData hashtable
+    } # End of PrivateData hashtable
 
-# HelpInfo URI of this module
-# HelpInfoURI = ''
+    # HelpInfo URI of this module
+    # HelpInfoURI = ''
 
-# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-# DefaultCommandPrefix = ''
+    # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+    # DefaultCommandPrefix = ''
 
 }
 
