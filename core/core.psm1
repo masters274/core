@@ -533,6 +533,44 @@ Function Convert-ByteArrayToHex {
 }
 
 
+function Export-Function {
+	
+	<#
+		Used to get the content of functions for building them on a remote machine.
+		
+		This could help to get your local functions on a remote computer, for instance
+		when performing an Invoke-Command and the remote system doesn't have what you need.
+		
+		Example:
+			[String] $code = Export-Function -Name 'Get-MyIpAddress', 'Get-GeoIpInfo'
+			
+			Invoke-Command -ComputerName computer1.domain.com -ScriptBlock { Invoke-Expression $Using:code; $ip = Get-MyIpAddress; Get-GeoIpInfo -IPAddress $ip }
+	#>
+
+	[CmdLetBinding()]
+	Param (
+		[Parameter(Mandatory, ValueFromPipeLine, HelpMessage = 'Name(s) of function to export')]
+		[String[]] $Name
+	)
+	
+	Process {
+		
+		foreach ($func in $Name) {
+			
+			$tmpFunc = Get-Command -Name $func
+			
+			if ($tmpFunc.CommandType -ne 'Function') {
+				
+				Throw 'Unable to get content of {0}. Command type of {1} -ne to function'
+				return
+			}
+		
+			'function {1} {3} {0} {2} {0} {4};{0}' -f "`r`n", $tmpFunc.Name, $tmpFunc.ScriptBlock.ToString(), '{', '}'
+		}
+	}
+}
+
+
 New-Alias -Name Add-Sig -Value Add-Signature -ErrorAction SilentlyContinue
 New-Alias -Name sign -Value Add-Signature -ErrorAction SilentlyContinue
 New-Alias -Name Set-EnvVar -Value Invoke-EnvironmentalVariable -ErrorAction SilentlyContinue
