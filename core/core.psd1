@@ -12,7 +12,7 @@
     RootModule        = 'core.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.4'
+    ModuleVersion     = '1.9.4.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -224,6 +224,9 @@ Version 1.9.3.1 & 2
 
 Version 1.9.4
 - Function (DEVELOPMENT) : added : Export-Function. 
+
+Version 1.9.4.1
+- Function (FILESYSTEM) : changed : Open-NotepadPlusPlus added path for 64bit installs. Fixed. 
 '
 
             # Prerelease string of this module

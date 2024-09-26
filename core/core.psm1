@@ -647,12 +647,16 @@ Function Open-NotepadPlusPlus {
     )
 
     Process {
-        [String] $strProgramPath = "${env:ProgramFiles(x86)}\Notepad++\notepad++.exe"
-        IF (Test-Path -Path $strProgramPath) {
-            & $strProgramPath $FileName
+        [String] $x86 = "${env:ProgramFiles(x86)}\Notepad++\notepad++.exe"
+        [String] $x64 = 
+        
+        if (Test-Path -Path $x64) {
+            & $x64 $FileName
         }
-
-        Else {
+        elseif (Test-Path -Path $x86) {
+            & $x86 $FileName
+        }
+        else {
             Write-Error -Message 'It appears that you do not have Notepad++ installed on this machine'
         }
     }
