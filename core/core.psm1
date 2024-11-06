@@ -648,7 +648,7 @@ Function Open-NotepadPlusPlus {
 
     Process {
         [String] $x86 = "${env:ProgramFiles(x86)}\Notepad++\notepad++.exe"
-        [String] $x64 = 
+        [String] $x64 = "${env:ProgramFiles}\Notepad++\notepad++.exe"
         
         if (Test-Path -Path $x64) {
             & $x64 $FileName
