@@ -230,6 +230,9 @@ Version 1.9.4.1
 
 Version 1.9.4.2
 - Function (FILESYSTEM) : changed : Second attempt to solve :(  Open-NotepadPlusPlus. 
+
+Version 1.9.4.3
+- Function (SECURITY) : changed : Get-LoggedOnUser converted to CIM instead of WMI. Now works in PWSH 7
 '
 
             # Prerelease string of this module

@@ -1452,138 +1452,134 @@ Function Start-ImpersonateUser {
 
 function Get-LoggedOnUser {
     [CmdletBinding()]
-    Param
-    (
-        [Parameter( Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [Alias('Name', 'IPAddress')]
-        [String[]]$ComputerName,
+        [string[]]$ComputerName,
 
         [System.Management.Automation.Credential()]
-        [PSCredential] $Credential,
+        [PSCredential]$Credential,
 
-        [Switch] $ShowEmpty
+        [switch]$ShowEmpty,
+
+        [Microsoft.Management.Infrastructure.Options.PasswordAuthenticationMechanism]$Authentication
     )
 
-    Begin {
-
-        $wmiParams = @{
-            Class       = 'Win32_Process'
-            Filter      = "Name='sihost.exe' OR Name='logonUI.exe'"
+    begin {
+        function Format-TimeSpan {
+            param([Parameter(Mandatory)][timespan]$Ts)
+            '{0}d {1}h {2}m {3}s' -f $Ts.Days, $Ts.Hours, $Ts.Minutes, $Ts.Seconds
         }
 
-        if ($ErrorAction) {
-
-            $wmiParams += @{ ErrorAction = $ErrorAction }
-        }
-
-        if ($WarningAction) {
-
-            $wmiParams += @{ WarningAction = $WarningAction }
-        }
-
-        if ($Credential) {
-            $wmiParams += @{ Credential = $Credential }
-        }
-
-        function Get-IdleInfo {
-
-            Param (
-
-                $processInfo
-            )
-
-            foreach ($proc in $processInfo) {
-
-                if ($proc.Name -eq 'logonUI.exe') {
-
-                    $id = $proc.SessionID
-
-                    $idleTime = ([WMI] '').ConvertToDateTime($proc.CreationDate)
-
-                    return @{
-                        Id       = $id
-                        IdleTime = $idleTime
-                    }
-                }
+        function New-EmptyRow {
+            param([Parameter(Mandatory)][string]$Comp)
+            [pscustomobject]@{
+                Computer      = $Comp
+                Domain        = $null
+                User          = $null
+                SessionId     = $null
+                CreationDate  = $null
+                LogonDuration = $null
+                Idle          = $null
+                IdleTime      = $null
             }
         }
     }
 
-    Process {
-        Foreach ($Computer in $ComputerName) {
-            $processinfo = @(Get-WmiObject @wmiParams -ComputerName $Computer)
-
-            if ($processinfo.Name -contains 'sihost.exe') {
-
-                # Need to get the idle info first, if exists
-                $idleInfo = Get-IdleInfo -processInfo $processinfo
-
-                $processinfo | Foreach-Object {
-
-                    if ($_.Name -eq 'LogonUI.exe') {
-                        return
-                    }
-
-                    $pi = $_
-                    $pi.GetOwner()
-                } |
-                Where-Object { $_ -notcontains 'NETWORK SERVICE' -and $_ -notcontains 'LOCAL SERVICE' -and $_ -notcontains 'SYSTEM' } |
-                Sort-Object -Unique -Property User |
-                ForEach-Object {
-
-                    $dt = ([WMI] '').ConvertToDateTime($pi.CreationDate)
-                    $idleTime = $(
-
-                        if ($idleInfo.Id -eq $pi.SessionId) {
-
-                            $t = New-TimeSpan -Start $idleInfo.IdleTime -End ([datetime]::now)
-
-                            '{0}d {1}h {2}m {3}s' -f $t.Days, $t.Hours, $t.Minutes, $t.Seconds
-                        }
-                        else {
-                            $null
-                        }
-                    )
-
-                    $ld = New-TimeSpan -Start $dt -End ([datetime]::now)
-                    $logonDuration = '{0}d {1}h {2}m {3}s' -f $ld.Days, $ld.Hours, $ld.Minutes, $ld.Seconds
-
-                    New-Object psobject -Property @{
-
-                        Computer      = $Computer
-                        Domain        = $_.Domain
-                        User          = $_.User
-                        SessionId     = $pi.SessionId
-                        CreationDate  = $dt
-                        LogonDuration = $logonDuration
-                        Idle          = $(if ($idleInfo.Id -eq $pi.SessionId) { $true } else { $false })
-                        IdleTime      = $idleTime
-                    }
-                } |
-                Select-Object Computer, Domain, User, SessionId, CreationDate, LogonDuration, Idle, IdleTime
+    process {
+        foreach ($computer in $ComputerName) {
+            
+            $cimParams = @{
+                ComputerName = $computer
             }
-            else {
 
-                if ($ShowEmpty) {
+            if ($Credential) {
+                $cimParams += @{
+                    Credential = $Credential
+                }
+            }
 
-                    New-Object psobject -Property @{
+            if ($Authentication) {
+                $cimParams += @{
+                    Authentication = $Authentication
+                }
+            }
 
-                        Computer      = $Computer
-                        Domain        = $null
-                        User          = $null
-                        SessionId     = $null
-                        CreationDate  = $null
-                        LogonDuration = $null
-                        Idle          = $null
-                        IdleTime      = $null
+            if ($ErrorAction) {
+
+                $cimParams += @{ ErrorAction = $ErrorAction }
+            }
+
+            if ($WarningAction) {
+
+                $cimParams += @{ WarningAction = $WarningAction }
+            }
+
+            $sess = New-CimSession @cimParams
+
+            try {
+                $filter = "Name='sihost.exe' OR Name='LogonUI.exe'"
+                $procs = @( Get-CimInstance -CimSession $sess -ClassName Win32_Process -Filter $filter )
+
+                if ($procs -and ($procs.Name -contains 'sihost.exe')) {
+                    # Idle info = LogonUI.exe session start time (if present)
+                    $logonUI = $procs | Where-Object Name -EQ 'LogonUI.exe' | Select-Object -First 1
+                    $idleInfo = if ($logonUI) {
+                        @{
+                            Id       = $logonUI.SessionId
+                            IdleTime = [datetime]$logonUI.CreationDate
+                        }
+                    }
+
+                    $rows = foreach ($p in ($procs | Where-Object Name -EQ 'sihost.exe')) {
+                        # Call the instance method through CIM
+                        $ownerCall = Invoke-CimMethod -InputObject $p -MethodName GetOwner
+                        if ($ownerCall.ReturnValue -ne 0) { continue }
+
+                        $start = [datetime]$p.CreationDate
+                        $ld = New-TimeSpan -Start $start -End (Get-Date)
+
+                        $isIdle = $false
+                        $idleText = $null
+                        if ($idleInfo -and $idleInfo.Id -eq $p.SessionId) {
+                            $ts = New-TimeSpan -Start $idleInfo.IdleTime -End (Get-Date)
+                            $isIdle = $true
+                            $idleText = Format-TimeSpan $ts
+                        }
+
+                        [pscustomobject]@{
+                            Computer      = $computer
+                            Domain        = $ownerCall.Domain
+                            User          = $ownerCall.User
+                            SessionId     = $p.SessionId
+                            CreationDate  = $start
+                            LogonDuration = (Format-TimeSpan $ld)
+                            Idle          = $isIdle
+                            IdleTime      = $idleText
+                        }
+                    }
+
+                    if ($rows) {
+                        $rows |
+                        Where-Object { $_.User -notin 'NETWORK SERVICE', 'LOCAL SERVICE', 'SYSTEM' } |
+                        Sort-Object -Property User -Unique |
+                        Select-Object Computer, Domain, User, SessionId, CreationDate, LogonDuration, Idle, IdleTime
+                    }
+                    elseif ($ShowEmpty) {
+                        New-EmptyRow -Comp $computer
                     }
                 }
                 else {
-                    $false
+                    if ($ShowEmpty) {
+                        New-EmptyRow -Comp $computer
+                    }
+                    else { 
+                        $false 
+                    }
                 }
+            }
+            finally {
+                if ($sess) { $sess | Remove-CimSession }
             }
         }
     }
